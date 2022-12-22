@@ -4,16 +4,15 @@ const onSubmit = (e) => {
     e.preventDefault();
 
     document.querySelector('.msg').textContent = '';
-    document.querySelector('#image').src = '';
 
     const prompt = document.querySelector('#prompt').value;
     const size = document.querySelector('#size').value;
-    if(prompt === '') {
+    if (prompt === '') {
         alert('Please write something')
         return;
     }
 
-    generateImageRequest(prompt, size) 
+    generateImageRequest(prompt, size)
 }
 
 async function generateImageRequest(prompt, size) {
@@ -30,15 +29,24 @@ async function generateImageRequest(prompt, size) {
                 size
             })
         });
-        if(!response.ok) {
+        if (!response.ok) {
             hideSpinner();
             throw new Error('That image could not be generated')
         }
 
         const data = await response.json()
-        const imageUrl = data.data;
+        const imagesUrlArray = data.data
+    
+        const imageContainer = document.querySelector('.image-container');
+        imageContainer.innerHTML = '';
 
-        document.querySelector('#image').src = imageUrl;
+        imagesUrlArray.map(item => {
+            const image = document.createElement('img');
+            image.src = item;
+            image.alt = 'A description of the image';
+            imageContainer.appendChild(image);
+        });
+        
 
         hideSpinner()
     } catch (error) {
@@ -47,12 +55,13 @@ async function generateImageRequest(prompt, size) {
 
 }
 const showSpinner = () => {
-    document.querySelector('.spinner').classList.add('.show')
-    console.log(document.querySelector('.spinner').classList)
+    const spinner = document.querySelector('.spinner')
+    spinner.classList.add('show')
 }
 
 const hideSpinner = () => {
-    document.querySelector('.spinner').classList.remove('.show')
+    const spinner = document.querySelector('.spinner')
+    spinner.classList.remove('show')
 }
 
 document.querySelector('#image-form').addEventListener('submit', onSubmit);
