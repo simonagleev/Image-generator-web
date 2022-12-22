@@ -36,7 +36,7 @@ async function generateImageRequest(prompt, size) {
 
         const data = await response.json()
         const imagesUrlArray = data.data
-    
+    console.log(imagesUrlArray)
         const imageContainer = document.querySelector('.image-container');
         imageContainer.innerHTML = '';
 
@@ -44,6 +44,7 @@ async function generateImageRequest(prompt, size) {
             const image = document.createElement('img');
             image.src = item;
             image.alt = 'A description of the image';
+            image.style = 'width: 40%'
             imageContainer.appendChild(image);
         });
         
